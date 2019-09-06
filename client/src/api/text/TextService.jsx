@@ -1,9 +1,10 @@
 import axios from 'axios'
 
 class TextService {
-    executeUserService(name) {
+    executeUserService(name, city) {
         return axios.post('http://localhost:8443/api/v1/users', {
-            Name: name
+            Name: name,
+            City: city
         });
     }
 

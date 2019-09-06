@@ -7,12 +7,17 @@ class TextComponent extends Component {
         this.state = {
             userId : '',
             userName : '',
+            city : '',
+            latitude : '',
+            longitude : '',
+            temperature: '',
             parentTextId : '',
             parentTextContent : '',
             parentTextDateentered : '',
             subTexts : [],
             userNameInput : '',
             textInput : '',
+            cityInput : '',
             responseInput : '',
             doneResult : false,
             respondingResult : false,
@@ -31,6 +36,9 @@ class TextComponent extends Component {
                     User Name :
                     <input type="text" name="userName" value = {this.state.userNameInput} onChange={ e => this.setState({userNameInput: e.target.value})} required />
                     <br/>
+                    City :
+                    <input type="text" name="city" pattern="[A-Za-z ]{1,}" title="City should only contain alphabets. e.g. Toronto" onChange={ e => this.setState({cityInput: e.target.value})} required />
+                    <br/>
                     Text :
                     <input type="text" name="text" value = {this.state.textInput} onChange={ e => this.setState({textInput: e.target.value})} required />
                     <br/>
@@ -40,6 +48,10 @@ class TextComponent extends Component {
                     <div className="doneResult">
                         <h4>Results :</h4>
                         <div>User Name = {this.state.userName}</div>
+                        <div>City = {this.state.city}</div>
+                        <div>Latitude = {this.state.latitude}</div>
+                        <div>Longitude = {this.state.longitude}</div>
+                        <div>Temperature (Celsius) = {this.state.temperature}</div>
                         <br/>
                         <div>
                             <div>Texts = </div>
@@ -66,7 +78,7 @@ class TextComponent extends Component {
 
     createUserAndText() {
         TextService
-            .executeUserService(this.state.userNameInput)
+            .executeUserService(this.state.userNameInput, this.state.cityInput)
             .then( response => {
                 this.handleSuccessfulUserResponse(response);
                 TextService.executeTextService(this.state.textInput, this.state.userId)
@@ -80,6 +92,11 @@ class TextComponent extends Component {
         this.setState({
             userId : response.data.id,
             userName : response.data.name,
+            city : response.data.city,
+            latitude : response.data.latitude,
+            longitude : response.data.longitude,
+            temperature : response.data.temperature,
+            responseInput : '',
             doneResult : false,
             respondingResult : false,
         })
