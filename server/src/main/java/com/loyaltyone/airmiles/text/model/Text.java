@@ -13,11 +13,15 @@ public class Text {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private LocalDateTime dateentered;
+
     public Text() {
     }
 
-    public Text(String content) {
+    public Text(String content, LocalDateTime dateEntered) {
         this.content = content;
+        this.dateentered = dateEntered;
     }
 
     public Long getId() {
@@ -34,6 +38,14 @@ public class Text {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateentered;
+    }
+
+    public void setDateTime(LocalDateTime dateEntered) {
+        this.dateentered = dateEntered;
     }
 
 }
