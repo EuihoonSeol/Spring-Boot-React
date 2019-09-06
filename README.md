@@ -5,7 +5,7 @@ Build tool : Maven (for Spring Boot) and npm (react-scripts for React)
 Application server : Tomcat
 Unit test framework : JUnit (for Spring Boot)
 
-My services are available on both web (Chrome, Internet Explorer, Firefox, and Safari) and mobile.
+My services are available on both web (Chrome) and mobile.
 
 **Prerequisites:** Java 8, Node.js and MySQL
 
@@ -18,7 +18,7 @@ git clone https://github.com/EuihoonSeol/Spring-Boot-React.git
 cd Spring-Boot-React
 ```
 
-Before running the server, cd into `server\src\main\resources` folder and update the following lines on `application.properties` files with your MySQL instance and login credentials
+Before running the server, cd into `server\src\main\resources` folder and update the following lines on `application.properties` file with your MySQL instance and login credentials
 
 ```bash
 spring.datasource.url=jdbc:mysql://localhost:3306/loyaltyone
