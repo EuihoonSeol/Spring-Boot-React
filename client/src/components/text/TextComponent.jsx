@@ -10,13 +10,18 @@ class TextComponent extends Component {
             parentTextId : '',
             parentTextContent : '',
             parentTextDateentered : '',
+            subTexts : [],
             userNameInput : '',
             textInput : '',
+            responseInput : '',
             doneResult : false,
+            respondingResult : false,
         }
         this.createUserAndText = this.createUserAndText.bind(this)
         this.handleSuccessfulUserResponse = this.handleSuccessfulUserResponse.bind(this)
         this.handleSuccessfulTextResponse = this.handleSuccessfulTextResponse.bind(this)
+        this.createResponse = this.createResponse.bind(this)
+        this.handleSuccessfulRespondingResponse = this.handleSuccessfulRespondingResponse.bind(this)
     }
 
     render() {
@@ -32,13 +37,26 @@ class TextComponent extends Component {
                     <input type="submit" value="Done" />
                 </form>
                 {this.state.doneResult ?
-                    <div>
+                    <div className="doneResult">
                         <h4>Results :</h4>
                         <div>User Name = {this.state.userName}</div>
+                        <br/>
                         <div>
-                            <h5>Texts :</h5>
+                            <div>Texts = </div>
                             {this.state.parentTextContent} {this.state.parentTextDateentered}
+                            <form onSubmit={(e) => {this.createResponse(); e.preventDefault();}}>
+                                <input type="text" name="response" value = {this.state.responseInput} onChange={ e => this.setState({responseInput: e.target.value})} required />
+                                <input type="submit" value="Responding" />
+                            </form>
                         </div>
+                    </div> :
+                    ""
+                }
+                { this.state.respondingResult ?
+                    <div className="respondingResult">
+                        {this.state.subTexts.map((subtext) => {
+                            return <ul key={subtext}>{subtext}</ul>
+                        })}
                     </div> :
                     ""
                 }
@@ -63,6 +81,7 @@ class TextComponent extends Component {
             userId : response.data.id,
             userName : response.data.name,
             doneResult : false,
+            respondingResult : false,
         })
     }
 
@@ -72,8 +91,31 @@ class TextComponent extends Component {
             parentTextContent : response.data.content,
             parentTextDateentered : response.data.dateTime,
             doneResult : true,
+            respondingResult : false,
         })
     }
+
+    createResponse() {
+        TextService
+            .executeSubtextService(this.state.responseInput, this.state.parentTextId)
+            .then( response => this.handleSuccessfulRespondingResponse(response) )
+            .catch( error => console.log(error) );
+    }
+
+    handleSuccessfulRespondingResponse(response) {
+        let tempArr = [];
+        for (let i = 0; i < response.data.length; i++) {
+            let tempObj = "";
+            tempObj = response.data[i].content + " " + response.data[i].dateTime;
+            tempArr.push(tempObj);
+        }
+
+        this.setState({
+            subTexts : tempArr,
+            respondingResult : true,
+        })
+    }
+
 }
 
 export default TextComponent;
