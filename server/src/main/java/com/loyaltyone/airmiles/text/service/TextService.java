@@ -1,6 +1,8 @@
 package com.loyaltyone.airmiles.text.service;
 
 import com.loyaltyone.airmiles.text.model.Text;
+import com.loyaltyone.airmiles.user.model.User;
+import com.loyaltyone.airmiles.user.repository.UserRepository;
 import com.loyaltyone.airmiles.text.repository.TextRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +18,21 @@ public class TextService {
     @Autowired
     private TextRepository textRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public ResponseEntity<Text> createText(Map<String, String> param) {
         Text text = new Text();
         text.setContent(param.get("Text"));
         text.setDateTime(LocalDateTime.now());
+        User user = userRepository
+                .findById(Long.valueOf(param.get("UserId")))
+                .orElse(null);
+        if (user == null) {
+            return new ResponseEntity<>(text, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        text.setUser(user);
 
         textRepository.save(text);
 

@@ -1,5 +1,8 @@
 package com.loyaltyone.airmiles.text.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.loyaltyone.airmiles.user.model.User;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -16,12 +19,18 @@ public class Text {
     @Column(nullable = false)
     private LocalDateTime dateentered;
 
+    @JsonManagedReference
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Text() {
     }
 
-    public Text(String content, LocalDateTime dateEntered) {
+    public Text(String content, LocalDateTime dateEntered, User user) {
         this.content = content;
         this.dateentered = dateEntered;
+        this.user = user;
     }
 
     public Long getId() {
@@ -47,5 +56,9 @@ public class Text {
     public void setDateTime(LocalDateTime dateEntered) {
         this.dateentered = dateEntered;
     }
+
+    public User getUser() { return user; }
+
+    public void setUser(User user) { this.user = user; }
 
 }
